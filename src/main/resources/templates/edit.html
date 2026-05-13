@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Entry</title>
+</head>
+<body>
+    <h2>Update Entry</h2>
+    <form th:action="@{/vault/update}" method="post">
+        <!-- Hidden Field: Requirement 5 (State Management) -->
+        <input type="hidden" name="id" th:value="${entry.id}" />
+        
+        <div>
+            <label>Platform Name:</label>
+            <input type="text" name="platformName" th:value="${entry.platformName}" required />
+        </div>
+        <div>
+            <label>Secret Word:</label>
+            <input type="password" name="secretWord" th:value="${entry.secretWord}" required />
+        </div>
+        <button type="submit">Save Changes</button>
+        <a th:href="@{/vault}">Cancel</a>
+    </form>
+</body>
+</html>

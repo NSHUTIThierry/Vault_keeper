@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Vault</title>
+</head>
+<body>
+    <header>
+        <span>Welcome, <b th:text="${session.loggedUser.username}">User</b></span>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit">Logout</button>
+        </form>
+    </header>
+
+    <h3>Add New Entry</h3>
+    <form th:action="@{/vault/add}" method="post">
+        <!-- Pre-fills platform name from cookie if available (Requirement FR-2) -->
+        <input type="text" name="platformName" placeholder="Platform" 
+               th:value="${lastPlatformCookie}" required />
+        <input type="password" name="secretWord" placeholder="Secret Word" required />
+        <button type="submit">Add to Vault</button>
+    </form>
+
+    <hr/>
+
+    <h3>Your Stored Secrets</h3>
+    <!-- Search Filter (FR-3) -->
+    <form th:action="@{/vault/search}" method="get">
+        <input type="text" name="q" placeholder="Search by platform..." />
+        <button type="submit">Filter</button>
+    </form>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Platform</th>
+                <th>Secret</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entry : ${entries}">
+                <td th:text="${entry.platformName}">Platform</td>
+                <!-- Displays masked version (e.g., ******s7) as per FR-3 -->
+                <td th:text="${entry.getMaskedSecret()}">Secret</td>
+                <td>
+                    <!-- Path Variable usage for Update/Delete (Requirement 5) -->
+                    <a th:href="@{/vault/edit/{id}(id=${entry.id})}">Modify</a>
+                    <form th:action="@{/vault/delete/{id}(id=${entry.id})}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Are you sure?')">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>VaultKeeper - System Error</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        .error-container { border: 1px solid #ccc; padding: 20px; display: inline-block; border-radius: 8px; }
+        .status { color: #d9534f; font-size: 2em; }
+        .message { color: #5bc0de; margin: 20px 0; }
+        .home-link { text-decoration: none; color: #337ab7; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <!-- Displays HTTP Status Code (e.g., 400 or 500) -->
+        <h1 class="status" th:text="${status != null ? status : 'Unknown Error'}">Error Code</h1>
+        
+        <!-- Friendly Message Requirement (FR-6) -->
+        <div class="message">
+            <p th:if="${status == 400}">The request was invalid or information is missing. Please check your inputs.</p>
+            <p th:if="${status == 500}">A system error occurred. Our team has been notified.</p>
+            <p th:if="${status != 400 and status != 500}" th:text="${message}">An unexpected error occurred.</p>
+        </div>
+
+        <p>For security, technical details have been hidden.</p>
+        
+        <hr/>
+        <a class="home-link" th:href="@{/vault}">Return to Vault Home</a>
+    </div>
+</body>
+</html>
